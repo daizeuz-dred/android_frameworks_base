@@ -74,6 +74,7 @@ public final class PlayIntegritySpoofService {
     private final Map<String, String> mSystemProps = new ConcurrentHashMap<>();
 
     private volatile boolean mConfigLoaded = false;
+    private volatile boolean mLoadAttempted = false;
     private volatile boolean mSignatureSpoofed = false;
 
     private PlayIntegritySpoofService() {}
@@ -81,9 +82,15 @@ public final class PlayIntegritySpoofService {
     public static synchronized PlayIntegritySpoofService getInstance() {
         if (sInstance == null) {
             sInstance = new PlayIntegritySpoofService();
-            sInstance.loadConfig();
         }
         return sInstance;
+    }
+
+    private void ensureConfigLoaded() {
+        if (!mConfigLoaded && !mLoadAttempted) {
+            mLoadAttempted = true;
+            loadConfig();
+        }
     }
 
     public void loadConfig() {
@@ -228,7 +235,7 @@ public final class PlayIntegritySpoofService {
     }
 
     public boolean shouldSpoof(String processName) {
-        if (!mConfigLoaded) return false;
+        ensureConfigLoaded(); if (!mConfigLoaded) return false;
         return DROIDGUARD_PACKAGE.equals(processName) || VENDING_PACKAGE.equals(processName);
     }
 
