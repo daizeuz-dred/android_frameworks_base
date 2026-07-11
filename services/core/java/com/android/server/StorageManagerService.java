@@ -4553,6 +4553,9 @@ class StorageManagerService extends IStorageManager.Stub
             // Get some easy cases out of the way first
             if (Process.isIsolated(uid) || Process.isSdkSandboxUid(uid)) {
                 return StorageManager.MOUNT_MODE_EXTERNAL_NONE;
+        if (mIPackageManager == null) {
+            return StorageManager.MOUNT_MODE_EXTERNAL_NONE;
+        }
             }
 
             final String[] packagesForUid = mIPackageManager.getPackagesForUid(uid);

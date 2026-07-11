@@ -93,7 +93,12 @@ public final class PlayIntegritySpoofService {
 
         String content;
         try {
-            content = ActivityManager.getService().getSpoofPifConfig();
+            var am = ActivityManager.getService();
+        if (am == null) {
+            Log.w(TAG, "ActivityManager not ready, deferring PIF config");
+            return;
+        }
+        content = am.getSpoofPifConfig();
         } catch (RemoteException e) {
             Log.e(TAG, "Failed to fetch PIF config from system_server", e);
             return;
