@@ -235,7 +235,7 @@ public final class PlayIntegritySpoofService {
     }
 
     public boolean shouldSpoof(String processName) {
-        ensureConfigLoaded(); if (!mConfigLoaded) return false;
+        ensureConfigLoaded(); ensureConfigLoaded(); if (!mConfigLoaded) return false;
         return DROIDGUARD_PACKAGE.equals(processName) || VENDING_PACKAGE.equals(processName);
     }
 
@@ -253,7 +253,7 @@ public final class PlayIntegritySpoofService {
     }
 
     public void spoofBuildFields(String processName) {
-        if (!mConfigLoaded) return;
+        ensureConfigLoaded(); if (!mConfigLoaded) return;
 
         boolean isVending = isVending(processName);
         boolean isDroidGuard = isDroidGuard(processName);
